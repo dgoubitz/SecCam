@@ -1,3 +1,6 @@
+from main import start_detection, motion_detected  # Assuming same directory
+
+
 import asyncio
 import websockets
 import json
@@ -28,5 +31,14 @@ async def listen_motion():
                 if "motion_sensor" in entity_id:
                     new_state = data["event"]["data"]["new_state"]["state"]
                     print(f"{entity_id} is now {new_state}")
+                    
+                    # Inside your motion handling:
+                    if new_state == "on":
+                        print("Motion detected, starting detection")
+                        motion_detected = True
+                        start_detection()  # starts the image capture
+                    elif new_state == "off":
+                        print("Motion stopped")
+                        motion_detected = False
 
 asyncio.run(listen_motion())
